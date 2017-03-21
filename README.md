@@ -11,10 +11,15 @@ Tests of two radio modules. I two sets of Wemos d1 min - radio to be able to tes
 
 ## 2.4GHz radio nRF24l01+
 
+![nrf24l01](docs/nrf24l01.png)
+
 ### Wiring
 
+![Wemos d1 mini](docs/wemos-d1-mini.jpg)
+![nrf24 pinout](docs/nrf24l01-pinout.jpeg)
+
 Wemos d1 mini | nRF24l01+
---- | --- 
+--- | ---
 3v3 | VCC
 G | GND
 D8 | CSN
@@ -26,7 +31,9 @@ D2 | CE
 
 ### Software
 
-I used [nrf24_reliable_datagram_client](http://www.airspayce.com/mikem/arduino/RadioHead/nrf24_reliable_datagram_client_8pde-example.html) to send a message to [nrf24_reliable_datagram_server](http://www.airspayce.com/mikem/arduino/RadioHead/nrf24_reliable_datagram_server_8pde-example.html).
+I started with
+-  http://www.airspayce.com/mikem/arduino/RadioHead/nrf24_reliable_datagram_client_8pde-example.html
+-  http://www.airspayce.com/mikem/arduino/RadioHead/nrf24_reliable_datagram_server_8pde-example.html.
 
 In both programs I specified my pin assigments for EN and CSN by replacing the row
 
@@ -35,6 +42,8 @@ In both programs I specified my pin assigments for EN and CSN by replacing the r
 with
 
 `RH_NRF24 driver(D2, D8);`
+
+resulting in the project folders nrf24rx and nrf24tx.
 
 - Install PlatformIO
 - clone this repo
@@ -45,6 +54,7 @@ with
 - Connect the nrf24tx to your PC, and open a serial monitor and reset to see that it initilizes correctly
 - Now you should see something like this:
 
+```
 ➜  nrf24rx git:(master) pio -f -c atom serialports monitor --port /dev/cu.wchusbserial1410
 --- Miniterm on /dev/cu.wchusbserial1410  115200,8,N,1 ---
 --- Quit: Ctrl+C | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H ---
@@ -53,13 +63,17 @@ got reply from : 0x2: And hello back to you
 Sending to nrf24_reliable_datagram_server
 got reply from : 0x2: And hello back to you
 ...
-`
+```
 
 ## 868MHz Lora radio RFM95W
+
+![Wemos d1 mini](docs/wemos-d1-mini.jpg)
+![rfm95w](docs/adafruit-rfm95w.jpg)
+
 ### Wiring
 
 Wemos d1 mini | RFM95W
---- | --- 
+--- | ---
 3v3 | Vin
 G | GND
 D8 | CS
@@ -72,3 +86,20 @@ D2 | G0 (IRQ)
 
 ### Software
 
+I started with
+- http://www.airspayce.com/mikem/arduino/RadioHead/rf95_reliable_datagram_client_8pde-example.html
+- http://www.airspayce.com/mikem/arduino/RadioHead/rf95_reliable_datagram_server_8pde-example.html.
+
+In this case I changed two lines in both programs:
+
+`RH_RF95 driver;`
+
+with
+
+`RH_RF95 driver(D8, D2);`
+
+and as I live in Sweden I added the following line to set the allowed frequency:
+
+`driver.setFrequency(868.0);`
+
+resulting in the project folders lorarx and loratx.
