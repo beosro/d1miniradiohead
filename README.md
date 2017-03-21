@@ -11,7 +11,7 @@ Tests of two radio modules. I two sets of Wemos d1 min - radio to be able to tes
 
 ## 2.4GHz radio nRF24l01+
 
-![nrf24l01](docs/nrf24l01.png)
+![nrf24l01](docs/nrf24l01.jpg)
 
 ### Wiring
 
