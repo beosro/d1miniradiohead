@@ -23,10 +23,18 @@ void setup()
   if (!manager.init())
     Serial.println("init failed");
   // Defaults after init are 2.402 GHz (channel 2), 2Mbps, 0dBm
+
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, 1);
 }
+
 uint8_t data[] = "Hello World!";
+
 // Dont put this on the stack:
 uint8_t buf[RH_NRF24_MAX_MESSAGE_LEN];
+
+int isOn = 0;
+
 void loop()
 {
   Serial.println("Sending to nrf24_reliable_datagram_server");
@@ -43,6 +51,9 @@ void loop()
       Serial.print(from, HEX);
       Serial.print(": ");
       Serial.println((char*)buf);
+
+      digitalWrite(LED_BUILTIN, isOn);
+      isOn = !isOn;
     }
     else
     {
