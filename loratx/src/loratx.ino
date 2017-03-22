@@ -16,8 +16,7 @@ RH_RF95 driver(D8, D2);
 RHReliableDatagram manager(driver, CLIENT_ADDRESS);
 // Need this on Arduino Zero with SerialUSB port (eg RocketScream Mini Ultra Pro)
 //#define Serial SerialUSB
-void setup()
-{
+void setup() {
   // Rocket Scream Mini Ultra Pro with the RFM95W only:
   // Ensure serial flash is not interfering with radio communication on SPI bus
 //  pinMode(4, OUTPUT);
@@ -43,33 +42,37 @@ void setup()
   // Detection shows no activity on the channel before transmitting by setting
   // the CAD timeout to non-zero:
 //  driver.setCADTimeout(10000);
+
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, 1);
 }
+
+int isOn = 0;
+
 uint8_t data[] = "Hello World!";
 // Dont put this on the stack:
 uint8_t buf[RH_RF95_MAX_MESSAGE_LEN];
-void loop()
-{
+void loop() {
   Serial.println("Sending to rf95_reliable_datagram_server");
 
   // Send a message to manager_server
-  if (manager.sendtoWait(data, sizeof(data), SERVER_ADDRESS))
-  {
+  if (manager.sendtoWait(data, sizeof(data), SERVER_ADDRESS)) {
     // Now wait for a reply from the server
     uint8_t len = sizeof(buf);
     uint8_t from;
-    if (manager.recvfromAckTimeout(buf, &len, 2000, &from))
-    {
+    if (manager.recvfromAckTimeout(buf, &len, 2000, &from)) {
       Serial.print("got reply from : 0x");
       Serial.print(from, HEX);
       Serial.print(": ");
       Serial.println((char*)buf);
-    }
-    else
-    {
+
+      digitalWrite(LED_BUILTIN, isOn);
+      isOn = !isOn;
+    } else {
       Serial.println("No reply, is rf95_reliable_datagram_server running?");
     }
-  }
-  else
+  } else {
     Serial.println("sendtoWait failed");
+  }
   delay(500);
 }
